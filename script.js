@@ -267,57 +267,108 @@ async function endGame() {
     }
 }
 
-function generateAIAnalysis(score, time, errors, accuracy, totalNotes) {
-    const averageTimePerNote = time / totalNotes;
-    let analysisHtml = '<h3>AI 分析報告</h3><ul>';
+// AI 評語生成器
+function generateDynamicFeedback() {
+    // 移除未使用的 performance 參數
+    const adjectives = {
+        speed: ['驚人的', '令人印象深刻的', '穩健的', '流暢的', '靈活的'],
+        accuracy: ['精確的', '細膩的', '專注的', '穩定的', '細心的'],
+        style: ['優雅的', '充滿活力的', '富有表現力的', '自信的', '富有韻律的']
+    };
     
-    // 速度分析
-    if (averageTimePerNote < 1) {
-        analysisHtml += '<li>反應速度非常快！平均每個音符只用了 ' + averageTimePerNote.toFixed(2) + ' 秒</li>';
-    } else if (averageTimePerNote < 2) {
-        analysisHtml += '<li>反應速度適中，平均每個音符用時 ' + averageTimePerNote.toFixed(2) + ' 秒</li>';
-    } else {
-        analysisHtml += '<li>建議提高反應速度，目前平均每個音符用時 ' + averageTimePerNote.toFixed(2) + ' 秒</li>';
+    function getRandomAdjective(type) {
+        return adjectives[type][Math.floor(Math.random() * adjectives[type].length)];
+    }
+    
+    const metaphors = [
+        '如同一位指揮家般',
+        '彷彿一位舞者般',
+        '像一位音樂詩人般',
+        '如同一位藝術家般',
+        '猶如一位魔法師般'
+    ];
+
+    function generatePersonalizedComment(stats) {
+        // 添加更多模板變化
+        const templates = [
+            `這次的表現${stats.speed}，展現出了${stats.quality}的音樂感！`,
+            `${stats.metaphor}，你${stats.action}展現出驚人的潛力！`,
+            `在這${stats.difficulty}難度下，你${stats.achievement}！`,
+            `透過${stats.feature}，你展現出了${stats.talent}！`,
+            `你的演奏${stats.style}，讓人感受到${stats.emotion}！`,
+            `${getRandomAdjective('style')}演奏風格中，你${stats.action}完成了挑戰！`,
+            `以${getRandomAdjective('speed')}速度和${getRandomAdjective('accuracy')}準確度，你${stats.achievement}！`
+        ];
+        return templates[Math.floor(Math.random() * templates.length)];
     }
 
-    // 準確度分析
-    if (accuracy > 90) {
-        analysisHtml += '<li>準確度極高！保持這種水準！</li>';
-    } else if (accuracy > 70) {
-        analysisHtml += '<li>準確度良好，但還有提升空間</li>';
-    } else {
-        analysisHtml += '<li>建議放慢速度，優先確保準確度</li>';
-    }
-
-    // 錯誤模式分析
-    if (errors > 0) {
+    return function generateAIAnalysis(score, time, errors, accuracy, totalNotes) {
+        const averageTimePerNote = time / totalNotes;
         const errorRate = (errors / totalNotes) * 100;
-        if (errorRate > 50) {
-            analysisHtml += '<li>錯誤率較高，建議從簡單難度開始練習</li>';
-        } else if (errorRate > 25) {
-            analysisHtml += '<li>適度的錯誤是學習過程的一部分，繼續加油！</li>';
+        
+        // 根據表現動態生成評語內容
+        const performanceStats = {
+            speed: averageTimePerNote < 1 ? '快速而精準' : averageTimePerNote < 2 ? '節奏穩定' : '謹慎細心',
+            quality: accuracy > 90 ? '卓越' : accuracy > 70 ? '優秀' : '潛力',
+            metaphor: metaphors[Math.floor(Math.random() * metaphors.length)],
+            action: errors === 0 ? '完美地' : errors < totalNotes * 0.2 ? '出色地' : '努力地',
+            difficulty: totalNotes <= 8 ? '基礎' : totalNotes <= 16 ? '進階' : '挑戰',
+            achievement: score >= 80 ? '達到了極高的水準' : score >= 60 ? '展現出了穩定的實力' : '付出了可貴的努力',
+            feature: errorRate < 10 ? '精確的節奏掌控' : errorRate < 30 ? '專注的演奏態度' : '堅持不懈的精神',
+            talent: accuracy > 90 ? '非凡的音樂天賦' : accuracy > 70 ? '優秀的演奏能力' : '持續進步的潛力',
+            style: averageTimePerNote < 1.5 ? '充滿活力且準確' : '穩重而細膩',
+            emotion: score >= 80 ? '音樂的美妙' : '不斷成長的決心'
+        };
+
+        // 生成個性化評語
+        const mainComment = generatePersonalizedComment(performanceStats);
+
+        // 生成技術分析
+        const technicalAnalysis = [];
+        if (averageTimePerNote < 1) {
+            technicalAnalysis.push(`你的平均反應時間僅需 ${averageTimePerNote.toFixed(2)} 秒，展現出極快的反應速度。`);
+        } else if (averageTimePerNote > 2) {
+            technicalAnalysis.push(`目前的平均反應時間是 ${averageTimePerNote.toFixed(2)} 秒，我們可以一起提升這個數字。`);
         }
-    }
 
-    // 綜合建議
-    analysisHtml += '<li>綜合表現評分：' + score + ' 分</li>';
-    
-    // 改進建議
-    analysisHtml += '<li>改進建議：';
-    if (accuracy < 80) {
-        analysisHtml += '專注於準確度 > 速度；';
-    }
-    if (averageTimePerNote > 2) {
-        analysisHtml += '可以嘗試更多練習來提高反應速度；';
-    }
-    if (errors > totalNotes * 0.3) {
-        analysisHtml += '建議先從較簡單的難度開始；';
-    }
-    analysisHtml += '</li>';
+        if (accuracy > 90) {
+            technicalAnalysis.push(`${accuracy}% 的準確率證明了你對音符的精準掌控。`);
+        } else if (accuracy < 70) {
+            technicalAnalysis.push(`準確率還有提升空間，建議可以放慢速度，專注於每個音符的準確性。`);
+        }
 
-    analysisHtml += '</ul>';
-    return analysisHtml;
+        // 生成建議
+        const suggestions = [];
+        if (accuracy < 80) suggestions.push('提高準確度可以從放慢速度開始，確保每個音符的準確性');
+        if (averageTimePerNote > 2) suggestions.push('通過反覆練習來提升反應速度，從簡單的節奏開始');
+        if (errors > totalNotes * 0.3) suggestions.push('建議先從較簡單的難度開始，打好基礎很重要');
+
+        // 組合 HTML
+        let analysisHtml = `
+            <h3>AI 音樂分析報告</h3>
+            <div class="analysis-section">
+                <p class="main-comment">${mainComment}</p>
+                <div class="technical-details">
+                    ${technicalAnalysis.map(detail => `<p>${detail}</p>`).join('')}
+                </div>
+                ${suggestions.length > 0 ? `
+                <div class="suggestions">
+                    <h4>改進建議：</h4>
+                    <ul>${suggestions.map(sug => `<li>${sug}</li>`).join('')}</ul>
+                </div>` : ''}
+                <div class="score-summary">
+                    <p>綜合評分：${score} 分</p>
+                    <p>準確率：${accuracy}%</p>
+                    <p>平均反應時間：${averageTimePerNote.toFixed(2)} 秒</p>
+                </div>
+            </div>`;
+
+        return analysisHtml;
+    };
 }
+
+// 創建評語生成器實例
+const generateAIAnalysis = generateDynamicFeedback();
 
 // Initialize connection to Arduino when page loads
 document.addEventListener('DOMContentLoaded', connectArduino);
@@ -331,3 +382,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { once: true });
 });
+
