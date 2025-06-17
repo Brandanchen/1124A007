@@ -80,24 +80,71 @@
             justify-content: center;
         }
         .ai-analysis {
-            margin: 20px;
+            margin: 20px auto;
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 10px;
             border-left: 5px solid #4CAF50;
             max-width: 600px;
+            font-family: "Microsoft JhengHei", sans-serif;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .ai-analysis h3 {
             color: #2c3e50;
             margin-top: 0;
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
-        .ai-analysis ul {
-            padding-left: 20px;
-            margin: 10px 0;
+        .analysis-section {
+            line-height: 1.6;
         }
-        .ai-analysis li {
-            margin: 5px 0;
+        .main-comment {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+        .technical-details {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        .technical-details p {
+            margin: 8px 0;
             color: #34495e;
+        }
+        .suggestions {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 5px;
+        }
+        .suggestions h4 {
+            color: #f57c00;
+            margin: 0 0 10px 0;
+        }
+        .suggestions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .suggestions li {
+            margin: 5px 0;
+            color: #555;
+        }
+        .score-summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .score-summary p {
+            margin: 5px 0;
+            color: #1976d2;
         }
     </style>
 </head>
@@ -112,6 +159,7 @@
         <button class="difficulty-btn" onclick="setDifficulty(32)">地獄</button>
     </div>    <div id="countdown" class="countdown"></div>
     <div class="note-container" id="noteContainer"></div>
+    <div class="ai-analysis" id="aiAnalysis"></div>
     <div class="score-display" id="scoreDisplay">
         <h2>得分: <span id="score">0</span></h2>
         <p>用時: <span id="time">0</span> 秒</p>
@@ -119,7 +167,7 @@
         <p>準確率: <span id="accuracy">0</span>%</p>
     </div>
     <div class="feedback" id="feedback"></div>
-    <div class="ai-analysis" id="aiAnalysis"></div>
     <script src="script.js"></script>
 </body>
 </html>
+
