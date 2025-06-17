@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音樂遊戲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .difficulty-buttons {
+            margin: 20px;
+        }
+        .difficulty-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .note-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 800px;
+            margin: 20px;
+        }
+        .note {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .note.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        .score-display {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+        .feedback {            margin: 20px;
+            font-style: italic;
+        }
+        .connect-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            margin: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .connect-btn:hover {
+            background-color: #45a049;
+        }        .connect-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .countdown {
+            font-size: 72px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-analysis {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            max-width: 600px;
+        }
+        .ai-analysis h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .ai-analysis ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .ai-analysis li {
+            margin: 5px 0;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <h1>音樂遊戲</h1>
+    <button id="connectButton" class="connect-btn" onclick="connectArduino()">連接 Arduino</button>
+    <div id="connectionStatus" style="margin: 10px; color: #666;">未連接</div>
+    <div class="difficulty-buttons">
+        <button class="difficulty-btn" onclick="setDifficulty(4)">簡單</button>
+        <button class="difficulty-btn" onclick="setDifficulty(8)">普通</button>
+        <button class="difficulty-btn" onclick="setDifficulty(16)">困難</button>
+        <button class="difficulty-btn" onclick="setDifficulty(32)">地獄</button>
+    </div>    <div id="countdown" class="countdown"></div>
+    <div class="note-container" id="noteContainer"></div>
+    <div class="score-display" id="scoreDisplay">
+        <h2>得分: <span id="score">0</span></h2>
+        <p>用時: <span id="time">0</span> 秒</p>
+        <p>錯誤次數: <span id="errors">0</span></p>
+        <p>準確率: <span id="accuracy">0</span>%</p>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="ai-analysis" id="aiAnalysis"></div>
+    <script src="script.js"></script>
+</body>
+</html>
